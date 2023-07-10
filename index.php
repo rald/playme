@@ -12,9 +12,7 @@
 
 <?php
 
-$f=fopen("data/id.txt","r");
-$id=(int)fgets($f);
-fclose($f);
+$r=array_filter(explode("\n",file_get_contents("data/rank.txt")));
 
 ?>
 
@@ -22,9 +20,10 @@ fclose($f);
 
 <?php
 
-for($i=1;$i<$id;$i++) {
+for($i=0;$i<count($r);$i++) {
 
-	$h=str_pad(dechex($i),4,"0",STR_PAD_LEFT);
+	$h=trim($r[$i]);
+
 	$n="data/".$h.".txt";	
 
 	$f=fopen($n,"r");
@@ -34,6 +33,7 @@ for($i=1;$i<$id;$i++) {
 ?>
 
 <tr>
+	<td><?=($i+1).". "?></td>
 	<td><?=$h?></td>
 	<td><a href="player.php?id=<?=$h?>"><?=$title?></a></td>
 	<td><a href="like.php?id=<?=$h?>">like</a></td>	
@@ -43,6 +43,7 @@ for($i=1;$i<$id;$i++) {
 <?php
 
 }
+
 
 ?>
 

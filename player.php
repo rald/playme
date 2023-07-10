@@ -100,16 +100,24 @@
       }
     }
 
+
+	function removeEmptyLines(lines) {
+		var result=[]
+		for (var i = 0; i < lines.length; i++) {
+			if(lines[i].trim() !== '') {
+				result.push(lines[i].trim());
+			}
+		}
+		return result;
+	}
+
+
     function openFile(event) {
       var input = event.target;
       var reader = new FileReader();
       reader.onload = function() {
         var text = reader.result;
-        urls = text.split('\n');
-
-        for (var i = 0; i < urls.length; i++) {
-          if (urls[i].trim() === '') urls.splice(i, 1);
-        }
+        urls = removeEmptyLines(text.split('\n'));
 
         title.textContent = getFilename(input.value);
 

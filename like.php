@@ -1,15 +1,19 @@
 <?php
 
-$d=(int)$_GET['id'];
+$d=$_GET['id'];
 
-$n1=hexdec($d);
-$n2=hexdec($d);
-if($n2-1>0) {
-	$f1=str_pad(dechex($n1),4,"0",STR_PAD_LEFT);
-	$f2=str_pad(dechex($n2-1),4,"0",STR_PAD_LEFT);
-	rename("data/".$f1.".txt","data/xxxx.txt");
-	rename("data/".$f2.".txt","data/".$f1.".txt");
-	rename("data/xxxx.txt","data/".$f2.".txt");
+$r=explode("\n",file_get_contents("data/rank.txt"));
+
+for($i=0;$i<count($r);$i++) {
+	if($r[$i]==$d) {
+		if($i>0) { 
+			$t=$r[$i-1];
+			$r[$i-1]=$r[$i];
+			$r[$i]=$t;
+			file_put_contents("data/rank.txt",implode("\n",$r));
+		}
+		break;
+	}
 }
 
 header("location: index.php");

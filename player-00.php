@@ -28,14 +28,10 @@
 
     <br><br>
 
-<!--
-
 		<input id="playlist" type="url" placeholder="playlist url">
 
 		<button onclick="loadPlaylist()">Load</button>
 		<button onclick="savePlaylist()">Save</button>
-
--->
 		    
   </center>
 

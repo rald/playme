@@ -46,7 +46,7 @@
     var audio = document.getElementById("audio");
     var items = document.getElementById("items");
     var playing = document.getElementById("playing");
- 	  var playlist = document.getElementById("playlist");
+// 	  var playlist = document.getElementById("playlist");
     var seek_slider = document.getElementById("seek_slider");
     var index = 0;
 

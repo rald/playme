@@ -1,13 +1,15 @@
 <?php
 
-$d=$_GET['id'];
+$id=$_GET['id'];
 
-$r=explode("\n",file_get_contents("data/rank.txt"));
+$r=array_filter(explode("\n",file_get_contents("data/rank.txt")));
 
 for($i=0;$i<count($r);$i++) {
-	if($r[$i]==$d) {
-		$c=count($r)-1;
-		if($i<$c) { 
+
+	$d=explode(" ",$r[$i],2);
+	
+	if($d[0]==$id) {
+		if($i<count($r)-1) { 
 			$t=$r[$i+1];
 			$r[$i+1]=$r[$i];
 			$r[$i]=$t;

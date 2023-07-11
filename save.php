@@ -7,13 +7,9 @@ $id=(int)fgets($f);
 fclose($f);
 
 $fn=str_pad(dechex($id),4,"0",STR_PAD_LEFT);
-$f=fopen("data/".$fn.".txt","w");
-fwrite($f,$d["title"]."\n");
-for($i=0;$i<count($d["urls"]);$i++) fwrite($f,$d["urls"][$i]."\n");
-fclose($f);
 
 $f=fopen("data/rank.txt","a");
-fwrite($f,$fn."\n");
+fwrite($f,$fn." ".$d['playlist']."\n");
 fclose($f);
 
 $f=fopen("data/id.txt","w");

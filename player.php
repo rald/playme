@@ -28,11 +28,11 @@
 
     <br><br>
 
-    <input id="selectedFile" type='file' accept='text/plain' onchange='openFile(event)' style='display:none;'>
-    <input type="button" value="Load Playlist" onclick="document.getElementById('selectedFile').click();" />
+		<input id="playlist" type="url" placeholder="playlist url">
 
-		<button onclick="save();">Save Playlist</button>
-    
+		<button onclick="loadPlaylist()">Load</button>
+		<button onclick="savePlaylist()">Save</button>
+		    
   </center>
 
 
@@ -42,6 +42,7 @@
     var audio = document.getElementById("audio");
     var items = document.getElementById("items");
     var playing = document.getElementById("playing");
+ 	  var playlist = document.getElementById("playlist");
     var seek_slider = document.getElementById("seek_slider");
     var index = 0;
 
@@ -112,63 +113,74 @@
 	}
 
 
-    function openFile(event) {
-      var input = event.target;
-      var reader = new FileReader();
-      reader.onload = function() {
-        var text = reader.result;
-        urls = removeEmptyLines(text.split('\n'));
 
-        title.textContent = getFilename(input.value);
-
-        play(0);
-
-      };
-      reader.readAsText(input.files[0]);
-    }
-
-
-function save() {
-	var data={title:title.textContent,urls:urls};
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "save.php");
-	xhr.onreadystatechange = function() { 
-		if(this.readyState == 4 && this.status == 200) {
-	 		var data=JSON.parse(this.responseText);
-			if(data.status==="OK") {
-				alert("Successfully saved.");
-			} else {
-				alert("Error saving.");
+function savePlaylist() {
+	if(playlist.value) {
+    var data={playlist: playlist.value};
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "save.php");
+		xhr.onreadystatechange = function() { 
+			if(this.readyState == 4 && this.status == 200) {
+		 		var data=JSON.parse(this.responseText);
+				if(data.status==="OK") {
+					alert("Successfully saved.");
+				} else {
+					alert("Error saving.");
+				}
 			}
 		}
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(data));
+	} else {
+		alert("Error saving.");
 	}
-	xhr.setRequestHeader("Content-type", "application/json");
-	xhr.send(JSON.stringify(data));
 }
 
+function getPlaylist(url,cb) {
+  var client = new XMLHttpRequest();
+  client.open('GET', url, true);
+  client.onreadystatechange = function() {
+    if (client.readyState === 4 && client.status === 200) {
+      cb(this.responseText);
+    }
+  }
+  client.send();
+}
 
+function loadPlaylist() {
+	getPlaylist(playlist.value,function(data) {
+		title.textContent=getFilename(playlist.value);
+		urls=removeEmptyLines(data.split("\n"));
+		play(0);
+	});
+}
 
 function load(id) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET","load.php?id="+id,true);
 	xhr.onreadystatechange = function() { 
 		if(this.readyState == 4 && this.status == 200) {
-			var data=JSON.parse(this.responseText);
-			title.textContent=data.title;
-			urls=data.urls;
-			play(0);
+			var data1=JSON.parse(this.responseText);
+			title.textContent=getFilename(data1.playlist);
+			getPlaylist(data1.playlist,function(data2) {
+				title.textContent=getFilename(data1.playlist);
+				urls=removeEmptyLines(data2.split("\n"));
+				play(0);
+			});
 		}
 	}
 	xhr.send();
 }
 
-
     audio.onended = next;
     setInterval(seekUpdate, 1000);
+
 
 <?php
 		if(isset($_GET['id'])) echo "load(\"".$_GET['id']."\");"		
 ?>
+
+
   </script>
 
 </body>

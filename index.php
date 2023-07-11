@@ -22,20 +22,16 @@ $r=array_filter(explode("\n",file_get_contents("data/rank.txt")));
 
 for($i=0;$i<count($r);$i++) {
 
-	$h=trim($r[$i]);
+	$d=explode(" ",$r[$i],2);
 
-	$n="data/".$h.".txt";	
-
-	$f=fopen($n,"r");
-	$title=fgets($f);
-	fclose($f);
-	
+	$h=$d[0];
+	$p=pathinfo($d[1],PATHINFO_FILENAME);	
 ?>
 
 <tr>
 	<td><?=($i+1).". "?></td>
 	<td><?=$h?></td>
-	<td><a href="player.php?id=<?=$h?>"><?=$title?></a></td>
+	<td><a href="player.php?id=<?=$h?>"><?=$p?></a></td>
 	<td><a href="like.php?id=<?=$h?>">like</a></td>	
 	<td><a href="hate.php?id=<?=$h?>">hate</a></td>	
 </tr>

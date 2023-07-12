@@ -7,8 +7,7 @@
 
 <center>
 
-		<a href="player.php">Player</a><br><br>
-
+<b>PlayMe</b><br><br>
 
 <?php
 
@@ -30,10 +29,10 @@ for($i=0;$i<count($r);$i++) {
 
 <tr>
 	<td><?=($i+1).". "?></td>
-	<td><?=$h?></td>
-	<td><a href="player.php?id=<?=$h?>"><?=$p?></a></td>
-	<td><a href="like.php?id=<?=$h?>">like</a></td>	
-	<td><a href="hate.php?id=<?=$h?>">hate</a></td>	
+	<td><a href="player.php?id=<?=$h?>" style="text-decoration:none;"><b><?=$h?></b></a></td>
+	<td><p style="width:200px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><?=$p?></p></td>	
+	<td><a href="clap.php?id=<?=$h?>">clap</a></td>	
+	<td><a href="slap.php?id=<?=$h?>">slap</a></td>	
 </tr>
 
 <?php

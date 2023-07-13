@@ -11,6 +11,18 @@
 
 <?php
 
+class K {
+	public $id,$karma,$url;
+
+	function __construct($id,$karma,$url) {
+		$this->id=$id;	
+		$this->karma=$karma;	
+		$this->url=$url;	
+	}
+
+}
+
+
 $r=array_filter(explode("\n",file_get_contents("data/rank.txt")));
 
 ?>
@@ -19,20 +31,28 @@ $r=array_filter(explode("\n",file_get_contents("data/rank.txt")));
 
 <?php
 
+$s=[];
+
 for($i=0;$i<count($r);$i++) {
-
-	$d=explode(" ",$r[$i],2);
-
+	$d=explode(" ",$r[$i],3);
 	$h=$d[0];
-	$p=pathinfo($d[1],PATHINFO_FILENAME);	
+	$k=intval($d[1]);
+	$p=pathinfo($d[2],PATHINFO_FILENAME);
+
+	array_push($s,new K($h,$k,$p));
+}
+
+usort($s,fn($a,$b)=>$b->karma<=>$a->karma);
+
+for($i=0;$i<count($s);$i++) {
+
 ?>
 
 <tr>
 	<td><?=($i+1).". "?></td>
-	<td><a href="player.php?id=<?=$h?>" style="text-decoration:none;"><b><?=$h?></b></a></td>
-	<td><p style="width:200px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><?=$p?></p></td>	
-	<td><a href="clap.php?id=<?=$h?>">clap</a></td>	
-	<td><a href="slap.php?id=<?=$h?>">slap</a></td>	
+	<td><a href="player.php?id=<?=$s[$i]->id?>" style="text-decoration:none;"><b><?=$s[$i]->id?></b></a></td>
+	<td><p style="width:200px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><?=$s[$i]->url?></p></td>	
+	<td align="right"><font color="<?=($k<=0?'red':'blue')?>"><?=$s[$i]->karma?></font></td>
 </tr>
 
 <?php
